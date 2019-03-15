@@ -39,8 +39,9 @@ from Verification import Verification
 #                  from Wolfe import Wolfe
 #
 # ---> A modifier...
-# ---> A modifier...
-# ---> A modifier...
+
+from Oracle import OraclePG
+from Gradient_F import Gradient_F # Gradient à pas fixe.
 
 ##### Initialisation de l'algorithme
 
@@ -56,8 +57,8 @@ from Verification import Verification
 #                        x0 = 100 + np.random.normal(size=md)
 #
 # ---> A modifier...
-# ---> A modifier...
-# ---> A modifier...
+
+x0 = 0.1 * np.random.normal(size = n - md) # Problème primal.
 
 ##### Minimisation proprement dite
 
@@ -76,8 +77,10 @@ from Verification import Verification
 #                  copt, gopt, xopt = Gradient_V(OraclePG, x0)
 #
 # ---> A modifier...
-# ---> A modifier...
-# ---> A modifier...
+
+print()
+print("ALGORITHME DU GRADIENT A PAS FIXE")
+copt, gopt, xopt = Gradient_F(OraclePG, x0)
 
 ##### Verification des resultats
 
@@ -94,7 +97,7 @@ from Verification import Verification
 #                        qopt, zopt, fopt, popt = HydrauliqueDxopt)
 #
 # ---> A modifier...
-# ---> A modifier...
-# ---> A modifier...
+
+qopt, zopt, fopt, popt = HydrauliqueP(xopt) # Problème primal.
 
 Verification(qopt, zopt, fopt, popt)
