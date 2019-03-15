@@ -13,7 +13,7 @@ from scipy.optimize import minimize
 
 def Optim_Numpy(Oracle, x0):
 
-    results = minimize(lambda x: Oracle(x)[0], x0, jac=lambda x: Oracle(x)[1])
+    results = minimize(lambda x: Oracle(x, 4)[0], x0, jac=lambda x: Oracle(x, 4)[1])
 
     critere_opt = results.fun
     gradient_opt = results.jac

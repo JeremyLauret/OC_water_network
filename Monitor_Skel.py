@@ -42,6 +42,7 @@ from Verification import Verification
 
 from Oracle import OraclePG
 from Gradient_F import Gradient_F # Gradient à pas fixe.
+from Optim_Numpy import Optim_Numpy # Fonction scipy.optimize.minimize.
 
 ##### Initialisation de l'algorithme
 
@@ -79,8 +80,12 @@ x0 = 0.1 * np.random.normal(size = n - md) # Problème primal.
 # ---> A modifier...
 
 print()
-print("ALGORITHME DU GRADIENT A PAS FIXE")
-copt, gopt, xopt = Gradient_F(OraclePG, x0)
+
+# print("ALGORITHME DU GRADIENT A PAS FIXE")
+# copt, gopt, xopt = Gradient_F(OraclePG, x0)
+
+print("FONCTION MINIMIZE DE SCIPY")
+copt, gopt, xopt = Optim_Numpy(OraclePG, x0)
 
 ##### Verification des resultats
 
