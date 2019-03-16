@@ -40,10 +40,12 @@ from Verification import Verification
 #
 # ---> A modifier...
 
-from Oracle import OraclePG, OraclePH # Oracles
+from Oracle import OraclePG, OraclePH # Oracles.
 from Gradient_F import Gradient_F     # Gradient à pas fixe.
 from Optim_Numpy import Optim_Numpy   # Fonction scipy.optimize.minimize.
 from Newton_F import Newton_F         # Newton à pas fixe.
+from Gradient_V import Gradient_V     # Gradient à pas variable.
+from BFGS import BFGS                 # Quasi-Newton avec formule de BFGS.
 
 ##### Initialisation de l'algorithme
 
@@ -88,8 +90,11 @@ print()
 # print("ALGORITHME DE MINIMISATION DE SCIPY")
 # copt, gopt, xopt = Optim_Numpy(OraclePG, x0)
 
-print("ALGORITHME DE NEWTON A PAS FIXE")
-copt, gopt, xopt = Newton_F(OraclePH, x0)
+# print("ALGORITHME DE NEWTON A PAS FIXE")
+# copt, gopt, xopt = Newton_F(OraclePH, x0)
+
+print("ALGORITHME DE GRADIENT A PAS VARIABLE")
+copt, gopt, xopt = Gradient_V(OraclePH, x0)
 
 ##### Verification des resultats
 

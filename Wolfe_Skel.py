@@ -1,13 +1,6 @@
 #!/usr/bin/python
 
 import numpy as np
-#from numpy import dot
-from Oracle import *
-from Probleme_R import *
-from Structures_N import *
-vecttest = np.zeros(n-md)
-vecttest[3] = 3
-gradtest = [1,0,0,1,-6,1.6,0.34,1,1]
 
 ########################################################################
 #                                                                      #
@@ -47,9 +40,7 @@ def Wolfe(alpha, x, D, Oracle):
     ##### Algorithme de Fletcher-Lemarechal
     
     # Appel de l'oracle au point initial
-    argout = Oracle(x,4)
-    critere = argout[0]
-    gradient = argout[1]
+    critere_n, gradient_n = Oracle(x, 4)
     
     # Initialisation de l'algorithme
     alpha_n = alpha
@@ -57,43 +48,31 @@ def Wolfe(alpha, x, D, Oracle):
     
     # Boucle de calcul du pas
     while ok == 0:
-        
-        # xn represente le point pour la valeur courante du pas,
-        # xp represente le point pour la valeur precedente du pas.
-        xp = xn
-        xn = x + np.asarray(alpha_n)*D  #np.asarray ajouté
+        xp = xn              # Point précédent.
+        xn = x + alpha_n * D # Point actuel.
         
         # Calcul des conditions de Wolfe
-        argout_n = Oracle(xn,4)
-        critere_n = argout_n[0]
-        gradient_n = argout_n[1]
-        argout_p = Oracle(xp,4)
-        critere_p = argout_p[0]
-        gradient_p = argout_p[1]
-    
-        C1 = (critere_n - critere_p) - (omega_1*alpha_n*np.vdot(gradient_p,D))
-        C2 = (np.vdot(gradient_n,D)) - (omega_2*np.vdot(gradient_p,D))
-        print(C1,C2,alpha_n)
+        critere_p = critere_n                 # Critère précédent.
+        gradient_p = gradient_n               # Gradient précédent.
+        critere_n, gradient_n = Oracle(xn, 4) # Critère et gradient actuels.
+
+        grad_P_dot_D = np.vdot(gradient_p, D)
+        C1 = critere_p + omega_1 * alpha_n * grad_P_dot_D - critere_n
+        C2 = np.vdot(gradient_n, D) - omega_2 * grad_P_dot_D
+
         # Test des conditions de Wolfe
-        if (C1 <= 0):
-            if (C2 >= 0):
-                ok = 1
-            else :
-                alpha_min = alpha_n
-                if (alpha_max == np.inf):
-                    alpha_n = 2*alpha_n
-                else :
-                    alpha_n = 0.5*(alpha_min + alpha_max)
-        else :
+        if C1 < 0: # Première condition de Wolfe non vérifiée.
             alpha_max = alpha_n
-            alpha_n = 0.5*(alpha_min + alpha_max)
-            
-        # - si les deux conditions de Wolfe sont verifiees,
-        #   faire ok = 1 : on sort alors de la boucle while
-        # - sinon, modifier la valeur de alphan : on reboucle.
-        #
-        # ---> A completer...
-        # ---> A completer...
+            alpha_n = 0.5 * (alpha_min + alpha_max)
+        else:
+            if C2 < 0: # Seconde condition de Wolfe non vérifiée.
+                alpha_min = alpha_n
+                if alpha_max == np.inf:
+                    alpha_n = 2 * alpha_min
+                else:
+                    alpha_n = 0.5 * (alpha_min + alpha_max)
+            else:
+                ok = 1
         
         # Test d'indistinguabilite
         if np.linalg.norm(xn - xp) < dltx:
