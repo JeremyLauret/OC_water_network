@@ -40,9 +40,10 @@ from Verification import Verification
 #
 # ---> A modifier...
 
-from Oracle import OraclePG
-from Gradient_F import Gradient_F # Gradient à pas fixe.
-from Optim_Numpy import Optim_Numpy # Fonction scipy.optimize.minimize.
+from Oracle import OraclePG, OraclePH # Oracles
+from Gradient_F import Gradient_F     # Gradient à pas fixe.
+from Optim_Numpy import Optim_Numpy   # Fonction scipy.optimize.minimize.
+from Newton_F import Newton_F         # Newton à pas fixe.
 
 ##### Initialisation de l'algorithme
 
@@ -59,7 +60,7 @@ from Optim_Numpy import Optim_Numpy # Fonction scipy.optimize.minimize.
 #
 # ---> A modifier...
 
-x0 = 0.1 * np.random.normal(size = n - md) # Problème primal.
+x0 = 0.1 * np.random.normal(size = n - md) # Initialisation du problème primal.
 
 ##### Minimisation proprement dite
 
@@ -84,8 +85,11 @@ print()
 # print("ALGORITHME DU GRADIENT A PAS FIXE")
 # copt, gopt, xopt = Gradient_F(OraclePG, x0)
 
-print("FONCTION MINIMIZE DE SCIPY")
-copt, gopt, xopt = Optim_Numpy(OraclePG, x0)
+# print("ALGORITHME DE MINIMISATION DE SCIPY")
+# copt, gopt, xopt = Optim_Numpy(OraclePG, x0)
+
+print("ALGORITHME DE NEWTON A PAS FIXE")
+copt, gopt, xopt = Newton_F(OraclePH, x0)
 
 ##### Verification des resultats
 
