@@ -8,7 +8,7 @@ from Wolfe_Skel import Wolfe
 
 #############################################################################
 #                                                                           #
-#         METHODE DE GRADIENT CONJUGUE NON LINEAIRE                         #
+#         RESOLUTION D'UN PROBLEME D'OPTIMISATION SANS CONTRAINTES          #
 #                                                                           #
 #         Algorithme de Polak-Ribiere                                       #
 #                                                                           #
@@ -58,16 +58,14 @@ def Polak_Ribiere(Oracle, x0):
             error_count += 1
 
         # Mise a jour des variables
+        gradient_p = gradient   # Valeur précédente du gradient
+        direction_p = direction # Valeur précédente de la direction
         x = x + (gradient_step * direction)
 
         # Evolution du gradient, du pas, et du critere
         gradient_norm_list.append(gradient_norm)
         gradient_step_list.append(gradient_step)
         critere_list.append(critere)
-
-        # Valeurs précédentes du gradient et de la direction.
-        gradient_p = np.copy(gradient)
-        direction_p = np.copy(direction)
 
     if error_count > 0:
         print()

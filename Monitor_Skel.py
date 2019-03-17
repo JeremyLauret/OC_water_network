@@ -97,8 +97,11 @@ print()
 # print("ALGORITHME DE GRADIENT A PAS VARIABLE")
 # copt, gopt, xopt = Gradient_V(OraclePH, x0)
 
-print("ALGORITHME DE POLAK RIBIERE")
-copt, gopt, xopt = Polak_Ribiere(OraclePH, x0)
+# print("ALGORITHME DE POLAK RIBIERE")
+# copt, gopt, xopt = Polak_Ribiere(OraclePH, x0)
+
+print("ALGORITHME BFGS")
+copt, gopt, xopt = BFGS(OraclePH, x0)
 
 ##### Verification des resultats
 
