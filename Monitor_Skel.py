@@ -40,12 +40,13 @@ from Verification import Verification
 #
 # ---> A modifier...
 
-from Oracle import OraclePG, OraclePH # Oracles.
-from Gradient_F import Gradient_F     # Gradient à pas fixe.
-from Optim_Numpy import Optim_Numpy   # Fonction scipy.optimize.minimize.
-from Newton_F import Newton_F         # Newton à pas fixe.
-from Gradient_V import Gradient_V     # Gradient à pas variable.
-from BFGS import BFGS                 # Quasi-Newton avec formule de BFGS.
+from Oracle import OraclePG, OraclePH   # Oracles.
+from Gradient_F import Gradient_F       # Gradient à pas fixe.
+from Optim_Numpy import Optim_Numpy     # Fonction scipy.optimize.minimize.
+from Newton_F import Newton_F           # Newton à pas fixe.
+from Gradient_V import Gradient_V       # Gradient à pas variable.
+from Polak_Ribiere import Polak_Ribiere # Gradient conjugué non linéaire.
+from BFGS import BFGS                   # Quasi-Newton avec formule de BFGS.
 
 ##### Initialisation de l'algorithme
 
@@ -93,8 +94,11 @@ print()
 # print("ALGORITHME DE NEWTON A PAS FIXE")
 # copt, gopt, xopt = Newton_F(OraclePH, x0)
 
-print("ALGORITHME DE GRADIENT A PAS VARIABLE")
-copt, gopt, xopt = Gradient_V(OraclePH, x0)
+# print("ALGORITHME DE GRADIENT A PAS VARIABLE")
+# copt, gopt, xopt = Gradient_V(OraclePH, x0)
+
+print("ALGORITHME DE POLAK RIBIERE")
+copt, gopt, xopt = Polak_Ribiere(OraclePH, x0)
 
 ##### Verification des resultats
 

@@ -6,8 +6,6 @@ from numpy.linalg import norm
 from time import process_time
 from Wolfe_Skel import Wolfe
 
-from Fletcher_step import fletcher_step
-
 #############################################################################
 #                                                                           #
 #         RESOLUTION D'UN PROBLEME D'OPTIMISATION SANS CONTRAINTES          #
@@ -23,8 +21,10 @@ def Gradient_V(Oracle, x0):
     ##### Initialisation des variables
 
     iter_max = 10000
-    gradient_step_ini = 0.0005
+    gradient_step_ini = 1.
     threshold = 0.000001
+
+    error_count = 0  # Compteur de non-convergence de l'algorithme de Fletcher-Lemarechal.
 
     gradient_norm_list = []
     gradient_step_list = []
@@ -47,25 +47,27 @@ def Gradient_V(Oracle, x0):
             break
 
         # Direction de descente
-        D = -gradient
+        direction = -gradient
 
         # Pas de descente
-        gradient_step, code = Wolfe(gradient_step_ini, x, D, Oracle)
+        gradient_step, error_code = Wolfe(gradient_step_ini, x, direction, Oracle)
 
-        if code != 1:
-            print("WARNING : the Fletcher-Lemarechal algorthm did not converge properly.")
-            print("Gradient step : {}".format(gradient_step))
+        if error_code != 1:
+            error_count += 1
 
         # Mise a jour des variables
-        x = x + (gradient_step * D)
+        x = x + (gradient_step * direction)
 
         # Evolution du gradient, du pas, et du critere
         gradient_norm_list.append(gradient_norm)
         gradient_step_list.append(gradient_step)
         critere_list.append(critere)
 
-    ##### Resultats de l'optimisation
+    if error_count > 0:
+        print()
+        print("Non-convergence de l'algorithme de Fletcher-Lemarechal : {}".format(error_count))
 
+    ##### Resultats de l'optimisation
     critere_opt = critere
     gradient_opt = gradient
     x_opt = x

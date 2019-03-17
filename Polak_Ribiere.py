@@ -1,16 +1,16 @@
 #!/usr/bin/python
 
 import numpy as np
+
 from numpy.linalg import norm
 from time import process_time
-import matplotlib.pyplot as plt
 from Wolfe_Skel import Wolfe
 
 #############################################################################
 #                                                                           #
-#         RECHERCHE D'UNE DIRECTION DE DESCENTE                             #
+#         METHODE DE GRADIENT CONJUGUE NON LINEAIRE                         #
 #                                                                           #
-#         Méthodes de Polak-Ribière, BFGS et Newton                         #
+#         Algorithme de Polak-Ribiere                                       #
 #                                                                           #
 #############################################################################
 
@@ -22,40 +22,22 @@ def Polak_Ribiere(Oracle, x0):
     ##### Initialisation des variables
 
     iter_max = 10000
+    gradient_step_ini = 1.
     threshold = 0.000001
+
+    error_count = 0 # Compteur de non-convergence de l'algorithme de Fletcher-Lemarechal.
 
     gradient_norm_list = []
     gradient_step_list = []
     critere_list = []
-    gradient_list = []
 
     time_start = process_time()
 
-    # Point courant
     x = x0
 
-    #### Premiere iteration
-    critere, gradient = Oracle(x, 4)
-    gradient_norm = norm(gradient)
-
-    # Direction de descente
-    D = -gradient
-
-    # delta_k = critere
-    alpha = 1 ####################################### TO DO : Fletcher
-    alpha = Wolfe(alpha, x, D, Oracle)
-    x += alpha * D
-
-    gradient_norm_list.append(gradient_norm)
-    gradient_step_list.append(alpha)
-    critere_list.append(critere)
-    gradient_list.append(gradient)
-
     ##### Boucle sur les iterations
-
     for k in range(iter_max):
-
-        # Valeur du critere et du gradient
+        # Nouvelles valeurs du critere et du gradient
         critere, gradient = Oracle(x, 4)
 
         # Test de convergence
@@ -63,27 +45,35 @@ def Polak_Ribiere(Oracle, x0):
         if gradient_norm <= threshold:
             break
 
-        # Calcul de beta
-        beta = np.dot(np.transpose(gradient), gradient - gradient_list[-1]) / gradient_norm_list[-1]**2
-
         # Direction de descente
-        D = -gradient + beta * D
+        direction = -gradient
+        if k > 0:
+            beta = np.vdot(gradient, gradient - gradient_p) / gradient_norm_list[-1]**2
+            direction +=  beta * direction_p
 
-        # delta_k = critere
-        alpha = 1  ####################################### TO DO : Fletcher
-        alpha = Wolfe(alpha, x, D, Oracle)
+        # Pas de descente
+        gradient_step, error_code = Wolfe(gradient_step_ini, x, direction, Oracle)
+
+        if error_code != 1:
+            error_count += 1
 
         # Mise a jour des variables
-        x += alpha * D
+        x = x + (gradient_step * direction)
 
         # Evolution du gradient, du pas, et du critere
         gradient_norm_list.append(gradient_norm)
-        gradient_step_list.append(alpha)
+        gradient_step_list.append(gradient_step)
         critere_list.append(critere)
-        gradient_list.append(gradient)
+
+        # Valeurs précédentes du gradient et de la direction.
+        gradient_p = np.copy(gradient)
+        direction_p = np.copy(direction)
+
+    if error_count > 0:
+        print()
+        print("Non-convergence de l'algorithme de Fletcher-Lemarechal : {}".format(error_count))
 
     ##### Resultats de l'optimisation
-
     critere_opt = critere
     gradient_opt = gradient
     x_opt = x
@@ -98,4 +88,4 @@ def Polak_Ribiere(Oracle, x0):
     # Visualisation de la convergence
     Visualg(gradient_norm_list, gradient_step_list, critere_list)
 
-    return critere_opt, gradient_opt, x_opt
+    return critere_opt, gradient_opt, x_opt,

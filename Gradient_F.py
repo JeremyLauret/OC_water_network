@@ -44,10 +44,10 @@ def Gradient_F(Oracle, x0):
             break
 
         # Direction de descente
-        D = -gradient
+        direction = -gradient
         
         # Mise a jour des variables
-        x = x + (gradient_step*D)
+        x = x + (gradient_step*direction)
         
         # Evolution du gradient, du pas, et du critere
         gradient_norm_list.append(gradient_norm)
