@@ -47,6 +47,7 @@ from Newton_F import Newton_F           # Newton à pas fixe.
 from Gradient_V import Gradient_V       # Gradient à pas variable.
 from Polak_Ribiere import Polak_Ribiere # Gradient conjugué non linéaire.
 from BFGS import BFGS                   # Quasi-Newton avec formule de BFGS.
+from Newton_V import Newton_V           # Newton à pas variable.
 
 ##### Initialisation de l'algorithme
 
@@ -100,8 +101,11 @@ print()
 # print("ALGORITHME DE POLAK RIBIERE")
 # copt, gopt, xopt = Polak_Ribiere(OraclePH, x0)
 
-print("ALGORITHME BFGS")
-copt, gopt, xopt = BFGS(OraclePH, x0)
+# print("ALGORITHME BFGS")
+# copt, gopt, xopt = BFGS(OraclePH, x0)
+
+print("ALGORITHME DE NEWTON A PAS VARIABLE")
+copt, gopt, xopt = Newton_V(OraclePH, x0)
 
 ##### Verification des resultats
 
