@@ -21,7 +21,8 @@ def Gradient_V(Oracle, x0):
     ##### Initialisation des variables
 
     iter_max = 10000
-    gradient_step_ini = 1.
+    # gradient_step_ini = 1. # Problème primal.
+    gradient_step_ini = 1000  # Problème dual.
     threshold = 0.000001
 
     error_count = 0  # Compteur de non-convergence de l'algorithme de Fletcher-Lemarechal.

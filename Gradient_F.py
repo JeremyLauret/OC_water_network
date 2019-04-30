@@ -20,7 +20,7 @@ def Gradient_F(Oracle, x0):
     ##### Initialisation des variables
     
     iter_max = 10000
-    gradient_step = 0.0005
+    gradient_step = 0.6
     threshold = 0.000001
     
     gradient_norm_list = []

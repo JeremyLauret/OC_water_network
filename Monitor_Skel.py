@@ -24,105 +24,72 @@ from Verification import Verification
 
 ##### Fonctions a ecrire dans le cadre du projet
 
-# ---> Charger les fonctions associees a l'oracle du probleme,
-#      aux algorithmes d'optimisation et de recherche lineaire
-#
-#      Exemple 1 - le gradient a pas fixe :
-#
-#                  from OraclePG import OraclePG
-#                  from Gradient_F import Gradient_F
-#
-#      Exemple 2 - le gradient a pas variable :
-#
-#                  from OraclePG import OraclePG
-#                  from Gradient_V import Gradient_V
-#                  from Wolfe import Wolfe
-#
-# ---> A modifier...
-
-from Oracle import OraclePG, OraclePH   # Oracles.
-from Gradient_F import Gradient_F       # Gradient à pas fixe.
-from Optim_Numpy import Optim_Numpy     # Fonction scipy.optimize.minimize.
-from Newton_F import Newton_F           # Newton à pas fixe.
-from Gradient_V import Gradient_V       # Gradient à pas variable.
-from Polak_Ribiere import Polak_Ribiere # Gradient conjugué non linéaire.
-from BFGS import BFGS                   # Quasi-Newton avec formule de BFGS.
-from Newton_V import Newton_V           # Newton à pas variable.
+from Oracle import OraclePG, OraclePH, OracleDG, OracleDH   # Oracles.
+from Gradient_F import Gradient_F                           # Gradient à pas fixe.
+from Optim_Numpy import Optim_Numpy                         # Fonction scipy.optimize.minimize.
+from Newton_F import Newton_F                               # Newton à pas fixe.
+from Gradient_V import Gradient_V                           # Gradient à pas variable.
+from Polak_Ribiere import Polak_Ribiere                     # Gradient conjugué non linéaire.
+from BFGS import BFGS                                       # Quasi-Newton avec formule de BFGS.
+from Newton_V import Newton_V                               # Newton à pas variable.
 
 ##### Initialisation de l'algorithme
 
-# ---> La dimension du vecteur dans l'espace primal est n-md
-#      et la dimension du vecteur dans l'espace dual est md
-#
-#      Probleme primal :
-#
-#                        x0 = 0.1 * np.random.normal(size=n-md)
-#
-#      Probleme dual :
-#
-#                        x0 = 100 + np.random.normal(size=md)
-#
-# ---> A modifier...
-
-x0 = 0.1 * np.random.normal(size = n - md) # Initialisation du problème primal.
+# x0 = 0.1 * np.random.normal(size = n - md) # Initialisation du problème primal.
+x0 = 100 + np.random.normal(size = md) # Initialisation du problème dual.
 
 ##### Minimisation proprement dite
 
-# ---> Executer la fonction d'optimisation choisie
-#
-#      Exemple 1 - le gradient a pas fixe :
-#
-#                  print()
-#                  print("ALGORITHME DU GRADIENT A PAS FIXE")
-#                  copt, gopt, xopt = Gradient_F(OraclePG, x0)
-#
-#      Exemple 2 - le gradient a pas variable :
-#
-#                  print()
-#                  print("ALGORITHME DU GRADIENT A PAS VARIABLE")
-#                  copt, gopt, xopt = Gradient_V(OraclePG, x0)
-#
-# ---> A modifier...
-
 print()
 
-# print("ALGORITHME DU GRADIENT A PAS FIXE")
+## ---- Problème Primal ----
+# print("ALGORITHME DU GRADIENT A PAS FIXE (PROBLEME PRIMAL)")
 # copt, gopt, xopt = Gradient_F(OraclePG, x0)
 
-# print("ALGORITHME DE MINIMISATION DE SCIPY")
+# print("ALGORITHME DE MINIMISATION DE SCIPY (PROBLEME PRIMAL)")
 # copt, gopt, xopt = Optim_Numpy(OraclePG, x0)
 
-# print("ALGORITHME DE NEWTON A PAS FIXE")
+# print("ALGORITHME DE NEWTON A PAS FIXE (PROBLEME PRIMAL)")
 # copt, gopt, xopt = Newton_F(OraclePH, x0)
 
-# print("ALGORITHME DE GRADIENT A PAS VARIABLE")
+# print("ALGORITHME DE GRADIENT A PAS VARIABLE (PROBLEME PRIMAL)")
 # copt, gopt, xopt = Gradient_V(OraclePH, x0)
 
-# print("ALGORITHME DE POLAK RIBIERE")
+# print("ALGORITHME DE POLAK RIBIERE (PROBLEME PRIMAL)")
 # copt, gopt, xopt = Polak_Ribiere(OraclePH, x0)
 
-# print("ALGORITHME BFGS")
+# print("ALGORITHME BFGS (PROBLEME PRIMAL)")
 # copt, gopt, xopt = BFGS(OraclePH, x0)
 
-print("ALGORITHME DE NEWTON A PAS VARIABLE")
-copt, gopt, xopt = Newton_V(OraclePH, x0)
+# print("ALGORITHME DE NEWTON A PAS VARIABLE (PROBLEME PRIMAL)")
+# copt, gopt, xopt = Newton_V(OraclePH, x0)
+
+
+## ---- Problème Dual ----
+# print("ALGORITHME DU GRADIENT A PAS FIXE (PROBLEME DUAL)")
+# copt, gopt, xopt = Gradient_F(OracleDG, x0)
+
+# print("ALGORITHME DE MINIMISATION DE SCIPY (PROBLEME DUAL)")
+# copt, gopt, xopt = Optim_Numpy(OracleDG, x0)
+
+# print("ALGORITHME DE NEWTON A PAS FIXE (PROBLEME DUAL)")
+# copt, gopt, xopt = Newton_F(OracleDH, x0)
+
+# print("ALGORITHME DE GRADIENT A PAS VARIABLE (PROBLEME DUAL)")
+# copt, gopt, xopt = Gradient_V(OracleDH, x0)
+
+# print("ALGORITHME DE POLAK RIBIERE (PROBLEME DUAL)")
+# copt, gopt, xopt = Polak_Ribiere(OracleDH, x0)
+
+# print("ALGORITHME BFGS (PROBLEME DUAL)")
+# copt, gopt, xopt = BFGS(OracleDH, x0)
+
+print("ALGORITHME DE NEWTON A PAS VARIABLE (PROBLEME DUAL)")
+copt, gopt, xopt = Newton_V(OracleDH, x0)
 
 ##### Verification des resultats
 
-# ---> La fonction qui reconstitue les variables hydrauliques
-#      du reseau a partir de la solution du probleme s'appelle
-#      HydrauliqueP pour le probleme primal, et HydrauliqueD
-#      pour le probleme dual
-#
-#      Probleme primal :
-#
-#                        qopt, zopt, fopt, popt = HydrauliqueP(xopt)
-#
-#
-#                        qopt, zopt, fopt, popt = HydrauliqueDxopt)
-#
-# ---> A modifier...
-
-qopt, zopt, fopt, popt = HydrauliqueP(xopt) # Problème primal.
+# qopt, zopt, fopt, popt = HydrauliqueP(xopt) # Problème primal.
+qopt, zopt, fopt, popt = HydrauliqueD(xopt)  # Problème dual.
 
 Verification(qopt, zopt, fopt, popt)
